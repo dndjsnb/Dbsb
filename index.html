@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Center</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Download Center</h1>
+        <p>Silakan unduh file yang tersedia di bawah ini:</p>
+        
+        <div id="file-list" class="file-list">
+            <!-- Daftar file akan diisi oleh JavaScript -->
+            <p>Memuat daftar file...</p>
+        </div>
+        
+        <div class="admin-section">
+            <h2>Admin Area</h2>
+            <form id="upload-form" action="upload.php" method="post" enctype="multipart/form-data">
+                <input type="file" name="fileToUpload" id="fileToUpload" required>
+                <input type="submit" value="Upload File" name="submit">
+            </form>
+            <div id="message"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
