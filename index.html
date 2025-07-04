@@ -13,11 +13,14 @@
             font-family: 'Poppins', sans-serif;
             background-color: #f8f9fa;
             color: #333;
+            overflow-x: hidden;
         }
         
         .card {
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
+            position: relative;
+            z-index: 10;
         }
         
         .card:hover {
@@ -61,10 +64,74 @@
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
         }
+        
+        /* Balon */
+        .balloon {
+            position: absolute;
+            width: 40px;
+            height: 50px;
+            border-radius: 50%;
+            opacity: 0.8;
+            z-index: 1;
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .balloon:before {
+            content: "";
+            position: absolute;
+            width: 1px;
+            height: 100px;
+            background-color: rgba(255, 255, 255, 0.5);
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-100px) rotate(5deg); }
+        }
+        
+        /* Kembang api */
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 5px;
+            animation: explode 1s ease-out forwards;
+            opacity: 0;
+            z-index: 5;
+        }
+        
+        @keyframes explode {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(20); opacity: 0; }
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            z-index: 5;
+            animation: confetti-fall 3s linear forwards;
+        }
+        
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
     </style>
 </head>
 <body>
-    <div class="min-h-screen flex items-center justify-center p-4 gradient-bg">
+    <div class="min-h-screen flex items-center justify-center p-4 gradient-bg relative overflow-hidden">
+        <!-- Balon -->
+        <div id="balloons-container"></div>
+        
+        <!-- Kembang api -->
+        <div id="fireworks-container"></div>
+        
         <div class="w-full max-w-2xl">
             <div class="card bg-white rounded-xl overflow-hidden mb-6">
                 <div class="p-8">
@@ -110,7 +177,9 @@
             </div>
             
             <div class="text-center text-white text-sm">
-                <p>Dibuat dengan <i class="fas fa-heart text-red-400"></i> oleh fahmi seorang diri🥰</div>
+                <p>Dibuat dengan <i class="fas fa-heart text-red-400"></i> oleh fahmi seorang diri🥰</p>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -155,6 +224,86 @@
             // Mulai animasi typing
             typeWriter();
             
+            // Fungsi untuk membuat balon
+            function createBalloons() {
+                const colors = ['#FF5252', '#FF4081', '#E040FB', '#7C4DFF', '#536DFE', '#448AFF', '#40C4FF', '#18FFFF', '#64FFDA', '#69F0AE', '#B2FF59', '#EEFF41', '#FFFF00', '#FFD740', '#FFAB40', '#FF6E40'];
+                const container = document.getElementById('balloons-container');
+                
+                for (let i = 0; i < 15; i++) {
+                    const balloon = document.createElement('div');
+                    balloon.className = 'balloon';
+                    
+                    // Posisi acak
+                    const left = Math.random() * 100;
+                    const delay = Math.random() * 5;
+                    const duration = 5 + Math.random() * 10;
+                    const size = 30 + Math.random() * 30;
+                    
+                    // Warna acak
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    balloon.style.left = `${left}%`;
+                    balloon.style.bottom = `-100px`;
+                    balloon.style.backgroundColor = color;
+                    balloon.style.width = `${size}px`;
+                    balloon.style.height = `${size * 1.25}px`;
+                    balloon.style.animationDelay = `${delay}s`;
+                    balloon.style.animationDuration = `${duration}s`;
+                    
+                    container.appendChild(balloon);
+                }
+            }
+            
+            // Fungsi untuk membuat kembang api
+            function createFirework(x, y) {
+                const colors = ['#FF5252', '#FF4081', '#E040FB', '#7C4DFF', '#536DFE', '#448AFF', '#40C4FF', '#18FFFF', '#64FFDA', '#69F0AE', '#B2FF59', '#EEFF41', '#FFFF00', '#FFD740', '#FFAB40', '#FF6E40'];
+                const container = document.getElementById('fireworks-container');
+                
+                // Kembang api utama
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.left = `${x}px`;
+                firework.style.top = `${y}px`;
+                firework.style.boxShadow = `0 0 10px 5px ${colors[Math.floor(Math.random() * colors.length)]}`;
+                
+                container.appendChild(firework);
+                
+                // Buat confetti
+                for (let i = 0; i < 20; i++) {
+                    setTimeout(() => {
+                        const confetti = document.createElement('div');
+                        confetti.className = 'confetti';
+                        confetti.style.left = `${x}px`;
+                        confetti.style.top = `${y}px`;
+                        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                        
+                        // Bentuk acak (kotak atau lingkaran)
+                        if (Math.random() > 0.5) {
+                            confetti.style.borderRadius = '50%';
+                        } else {
+                            confetti.style.borderRadius = '0';
+                        }
+                        
+                        // Ukuran acak
+                        const size = 5 + Math.random() * 10;
+                        confetti.style.width = `${size}px`;
+                        confetti.style.height = `${size}px`;
+                        
+                        container.appendChild(confetti);
+                        
+                        // Hapus setelah animasi selesai
+                        setTimeout(() => {
+                            confetti.remove();
+                        }, 3000);
+                    }, i * 50);
+                }
+                
+                // Hapus setelah animasi selesai
+                setTimeout(() => {
+                    firework.remove();
+                }, 1000);
+            }
+            
             // Tombol generate
             document.getElementById('generate-btn').addEventListener('click', function() {
                 const nama = document.getElementById('nama').value.trim();
@@ -191,9 +340,29 @@
                 }
                 
                 completeGreeting.scrollIntoView({ behavior: 'smooth' });
+                
+                // Buat kembang api di beberapa posisi acak
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        const x = Math.random() * window.innerWidth;
+                        const y = Math.random() * window.innerHeight / 2;
+                        createFirework(x, y);
+                    }, i * 300);
+                }
             });
+            
+            // Buat balon saat halaman dimuat
+            createBalloons();
+            
+            // Buat kembang api otomatis setiap beberapa detik
+            setInterval(() => {
+                if (Math.random() > 0.7) { // 30% chance untuk membuat kembang api
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight / 2;
+                    createFirework(x, y);
+                }
+            }, 3000);
         });
     </script>
 </body>
-</html>
-
+    </html>
