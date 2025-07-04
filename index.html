@@ -17,6 +17,7 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
+            position: relative;
         }
 
         .login-card {
@@ -25,6 +26,8 @@
             padding: 2rem;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             text-align: center;
+            position: relative;
+            z-index: 10;
         }
 
         .btn-gold {
@@ -43,6 +46,26 @@
             transform: scale(1.05);
             box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
         }
+
+        .portal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            opacity: 0;
+            transition: width 1s ease, height 1s ease, opacity 1s ease;
+        }
+
+        .portal.open {
+            width: 200vw;
+            height: 200vh;
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -50,7 +73,22 @@
         <h1 class="text-2xl font-bold mb-4">Selamat Datang!</h1>
         <p class="mb-6">Silakan masuk untuk melanjutkan</p>
         <input type="text" placeholder="Nama Pengguna" class="w-full px-3 py-2 border border-gray-300 rounded-md mb-4" />
-        <button class="btn-gold" onclick="location.href='main.html'">Masuk</button>
+        <button class="btn-gold" id="login-btn">Masuk</button>
     </div>
+
+    <div class="portal" id="portal"></div>
+
+    <script>
+        document.getElementById('login-btn').addEventListener('click', function() {
+            // Menambahkan kelas 'open' untuk memulai animasi portal
+            const portal = document.getElementById('portal');
+            portal.classList.add('open');
+
+            // Setelah animasi selesai, arahkan ke halaman utama
+            setTimeout(() => {
+                location.href = 'main.html'; // Ganti dengan nama file halaman utama Anda
+            }, 1000); // Waktu yang sama dengan durasi animasi
+        });
+    </script>
 </body>
 </html>
